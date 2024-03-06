@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { Box, Flex, Heading, Input, Button, Checkbox } from '@chakra-ui/react';
 
-const RegisterPage: React.FC = () => {
+const RegisterPage = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
       ...prevState,
@@ -17,68 +18,37 @@ const RegisterPage: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    // Kirim data ke server
-    axios.post('http://localhost:5000/users', formData)
-      .then(response => {
-        console.log('User registered successfully:', response.data);
-        // Redirect ke halaman lain jika diperlukan
-      })
-      .catch(error => {
-        console.error('Error registering user:', error);
-      });
-  };
-
-  const handlePasswordVisibility = () => {
-    // Toggle password visibility
-    // Implementasi tergantung pada preferensi Anda
+    // Lakukan pengiriman data formulir ke server di sini
+    console.log(formData);
   };
 
   return (
-    <div className="register-container">
-      <h1>Page Register</h1>
-      <div className="form-group">
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="checkbox"
-          id="showPassword"
-          name="showPassword"
-          onChange={handlePasswordVisibility}
-        />
-        <label htmlFor="showPassword">Show Password</label>
-      </div>
-      <button onClick={handleSubmit}>Submit</button>
-    </div>
+    <Box p="4" maxWidth="600px" mx="auto">
+      <Heading as="h2" size="lg" mb="4">Page Register</Heading>
+      <Box>
+        <Box mb="4">
+          <label htmlFor="name">Name</label>
+          <Input type="text" id="name" name="name" value={formData.name} onChange={handleChange} />
+        </Box>
+        <Box mb="4">
+          <label htmlFor="email">Email</label>
+          <Input type="email" id="email" name="email" value={formData.email} onChange={handleChange} />
+        </Box>
+        <Box mb="4">
+          <label htmlFor="password">Password</label>
+          <Input
+            type={showPassword ? 'text' : 'password'}
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+          <Checkbox mt="2" onChange={() => setShowPassword(!showPassword)}>Show Password</Checkbox>
+        </Box>
+        <Button colorScheme="blue" onClick={handleSubmit}>Submit</Button>
+      </Box>
+    </Box>
   );
-}
+};
 
 export default RegisterPage;
